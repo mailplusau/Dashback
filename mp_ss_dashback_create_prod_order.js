@@ -43,6 +43,8 @@ function main() {
     var manual_surcharge_to_be_applied = false;
     var fuel_surcharge_to_be_applied = false;
 
+    var oldSenderAddress = null;
+
     /**
      * Go through each line item from the search.
      */
@@ -150,7 +152,7 @@ function main() {
                 productOrderRec.setFieldValue('custrecord_ras_teir1_barcode_count', rasTeir1Count);
                 productOrderRec.setFieldValue('custrecord_ras_teir2_barcode_count', rasTeir2Count);
                 productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
-                productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
+                // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
                 nlapiSubmitRecord(productOrderRec);
 
                 rasTeir1Count = 0;
@@ -224,13 +226,13 @@ function main() {
             ap_stock_line_item.setFieldValue(
                 'custrecord_ap_stock_line_actual_qty', 1);
 
-            if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
-                manual_surcharge_to_be_applied = true;
-                manualBarcodeCount++;
-            } else {
-                manual_surcharge_to_be_applied = false;
-                digital_label++;
-            }
+            // if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
+            //     manual_surcharge_to_be_applied = true;
+            //     manualBarcodeCount++;
+            // } else {
+            //     manual_surcharge_to_be_applied = false;
+            //     digital_label++;
+            // }
 
             nlapiSubmitRecord(ap_stock_line_item);
 
@@ -280,13 +282,13 @@ function main() {
             ap_stock_line_item.setFieldValue(
                 'custrecord_ap_stock_line_actual_qty', 1);
 
-            if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
-                manual_surcharge_to_be_applied = true;
-                manualBarcodeCount++;
-            } else {
-                manual_surcharge_to_be_applied = false;
-                digital_label++;
-            }
+            // if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
+            //     manual_surcharge_to_be_applied = true;
+            //     manualBarcodeCount++;
+            // } else {
+            //     manual_surcharge_to_be_applied = false;
+            //     digital_label++;
+            // }
 
 
             nlapiSubmitRecord(ap_stock_line_item);
@@ -322,7 +324,7 @@ function main() {
                 productOrderRec.setFieldValue('custrecord_ras_teir1_barcode_count', rasTeir1Count);
                 productOrderRec.setFieldValue('custrecord_ras_teir2_barcode_count', rasTeir2Count);
                 productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
-                productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
+                // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
                 nlapiSubmitRecord(productOrderRec);
 
                 rasTeir1Count = 0;
@@ -346,6 +348,7 @@ function main() {
 
         old_customer_id = cust_prod_customer;
         old_product_order_id = product_order_id
+        oldSenderAddress = sender_address_1;
         count++;
 
         return true;
@@ -365,7 +368,7 @@ function main() {
         productOrderRec.setFieldValue('custrecord_ras_teir1_barcode_count', rasTeir1Count);
         productOrderRec.setFieldValue('custrecord_ras_teir2_barcode_count', rasTeir2Count);
         productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
-        productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
+        // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
         nlapiSubmitRecord(productOrderRec);
     }
 
