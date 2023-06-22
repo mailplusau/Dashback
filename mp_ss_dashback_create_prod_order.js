@@ -44,6 +44,23 @@ function main() {
     var fuel_surcharge_to_be_applied = false;
 
     var oldSenderAddress = null;
+    var pickupJobCount = 0;
+
+    var todayDate = null;
+    var tranDate = null;
+    var previousWeekStartDate = null;
+
+    todayDate = new Date();
+    nlapiLogExecution('DEBUG', todayDate)
+
+    todayDate.setHours(todayDate.getHours() + 17);
+    nlapiLogExecution('DEBUG', todayDate);
+
+    var previousWeek = new Date(todayDate.getFullYear(), todayDate.getMonth(),
+        todayDate.getDate() - 7);
+
+    tranDate = nlapiDateToString(todayDate);
+    previousWeekStartDate = nlapiDateToString(previousWeek);
 
     /**
      * Go through each line item from the search.
@@ -155,6 +172,28 @@ function main() {
                 // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
                 nlapiSubmitRecord(productOrderRec);
 
+                //Create invoice for the number of pickup jobs for the week. 
+                recInvoice = nlapiCreateRecord('invoice', {
+                    recordmode: 'dynamic'
+                });
+                recInvoice.setFieldValue('customform', 116);
+                recInvoice.setFieldValue('entity', old_customer_id);
+                // recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+                //     435).getFieldValue('department'));
+                // recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+                //     435)
+                //     .getFieldValue('location'));
+                recInvoice.setFieldValue('trandate', tranDate);
+                recInvoice.setFieldValue('custbody_inv_date_range_from',
+                    previousWeekStartDate);
+                recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
+                recInvoice.selectNewLineItem('item');
+                recInvoice.setCurrentLineItemValue('item', 'item', 10789);
+                recInvoice.setCurrentLineItemValue('item', 'quantity',
+                    pickupJobCount);
+                recInvoice.commitLineItem('item');
+                invoiceId = nlapiSubmitRecord(recInvoice);
+
                 rasTeir1Count = 0;
                 rasTeir2Count = 0;
                 rasTeir3Count = 0;
@@ -197,6 +236,10 @@ function main() {
             product_order_rec.setFieldValue('custrecord_mp_ap_order_source', 6);
 
             product_order_id = nlapiSubmitRecord(product_order_rec);
+
+            if (oldSenderAddress != sender_address_1) {
+                pickupJobCount++;
+            }
 
 
             /**
@@ -249,6 +292,10 @@ function main() {
 
 
         } else {
+
+            if (oldSenderAddress != sender_address_1) {
+                pickupJobCount++;
+            }
 
             /**
              * Create Line Items associated to the product order.
@@ -370,6 +417,27 @@ function main() {
         productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
         // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
         nlapiSubmitRecord(productOrderRec);
+
+        recInvoice = nlapiCreateRecord('invoice', {
+            recordmode: 'dynamic'
+        });
+        recInvoice.setFieldValue('customform', 116);
+        recInvoice.setFieldValue('entity', old_customer_id);
+        // recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+        //     435).getFieldValue('department'));
+        // recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+        //     435)
+        //     .getFieldValue('location'));
+        recInvoice.setFieldValue('trandate', tranDate);
+        recInvoice.setFieldValue('custbody_inv_date_range_from',
+            previousWeekStartDate);
+        recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
+        recInvoice.selectNewLineItem('item');
+        recInvoice.setCurrentLineItemValue('item', 'item', 10789);
+        recInvoice.setCurrentLineItemValue('item', 'quantity',
+            pickupJobCount);
+        recInvoice.commitLineItem('item');
+        invoiceId = nlapiSubmitRecord(recInvoice);
     }
 
 }
