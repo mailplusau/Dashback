@@ -30,6 +30,7 @@ function main() {
     var resultCreateProdOrder = createProdOrderSearch.runSearch();
 
     var old_customer_id = null;
+    var old_zee_id = null;
     var product_order_id;
     var old_product_order_id = null;
     var count = 0;
@@ -115,9 +116,14 @@ function main() {
         newFilters[newFilters.length] = new nlobjSearchFilter('custrecord_ras_postcode', null, 'is',
             receiverPostcode);
 
-        tgeRASSuburbListSearch.addFilter(newFilters);
+        tgeRASSuburbListSearch.addFilters(newFilters);
         var tgeRASSuburbListSearch = tgeRASSuburbListSearch.runSearch();
+
         var teirType = 0;
+        var currentBarcodeRASTier1 = false;
+        var currentBarcodeRASTier2 = false;
+        var currentBarcodeRASTier3 = false;
+
         tgeRASSuburbListSearch.forEachResult(function (searchResult) {
 
             teirType = searchResult.getValue('custrecord_ras_teir');
@@ -126,10 +132,13 @@ function main() {
 
         if (teirType == 1) {
             rasTeir1Count++;
+            currentBarcodeRASTier1 = true;
         } else if (teirType == 2) {
             rasTeir2Count++;
+            currentBarcodeRASTier2 = true;
         } else if (teirType == 3) {
             rasTeir3Count++;
+            currentBarcodeRASTier3 = true;
         }
 
 
@@ -178,11 +187,11 @@ function main() {
                 });
                 recInvoice.setFieldValue('customform', 116);
                 recInvoice.setFieldValue('entity', old_customer_id);
-                // recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
-                //     435).getFieldValue('department'));
-                // recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
-                //     435)
-                //     .getFieldValue('location'));
+                recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+                    old_zee_id).getFieldValue('department'));
+                recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+                    old_zee_id)
+                    .getFieldValue('location'));
                 recInvoice.setFieldValue('trandate', tranDate);
                 recInvoice.setFieldValue('custbody_inv_date_range_from',
                     previousWeekStartDate);
@@ -194,9 +203,9 @@ function main() {
                 recInvoice.commitLineItem('item');
                 invoiceId = nlapiSubmitRecord(recInvoice);
 
-                rasTeir1Count = 0;
-                rasTeir2Count = 0;
-                rasTeir3Count = 0;
+                // rasTeir1Count = 0;
+                // rasTeir2Count = 0;
+                // rasTeir3Count = 0;
 
                 var params = {
                     custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
@@ -269,6 +278,17 @@ function main() {
             ap_stock_line_item.setFieldValue(
                 'custrecord_ap_stock_line_actual_qty', 1);
 
+            if (currentBarcodeRASTier1 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 1');
+            } else if (currentBarcodeRASTier2 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 3');
+            } else if (currentBarcodeRASTier3 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 3');
+            }
+
             // if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
             //     manual_surcharge_to_be_applied = true;
             //     manualBarcodeCount++;
@@ -329,6 +349,17 @@ function main() {
             ap_stock_line_item.setFieldValue(
                 'custrecord_ap_stock_line_actual_qty', 1);
 
+            if (currentBarcodeRASTier1 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 1');
+            } else if (currentBarcodeRASTier2 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 3');
+            } else if (currentBarcodeRASTier3 == true) {
+                ap_stock_line_item.setFieldValue(
+                    'custrecord_ap_bill_item_description', 'Tier 3');
+            }
+
             // if (barcode_source == 1 || isNullorEmpty(barcode_source)) {
             //     manual_surcharge_to_be_applied = true;
             //     manualBarcodeCount++;
@@ -374,9 +405,30 @@ function main() {
                 // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
                 nlapiSubmitRecord(productOrderRec);
 
-                rasTeir1Count = 0;
-                rasTeir2Count = 0;
-                rasTeir3Count = 0;
+                recInvoice = nlapiCreateRecord('invoice', {
+                    recordmode: 'dynamic'
+                });
+                recInvoice.setFieldValue('customform', 116);
+                recInvoice.setFieldValue('entity', old_customer_id);
+                recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+                    old_zee_id).getFieldValue('department'));
+                recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+                    old_zee_id)
+                    .getFieldValue('location'));
+                recInvoice.setFieldValue('trandate', tranDate);
+                recInvoice.setFieldValue('custbody_inv_date_range_from',
+                    previousWeekStartDate);
+                recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
+                recInvoice.selectNewLineItem('item');
+                recInvoice.setCurrentLineItemValue('item', 'item', 10789);
+                recInvoice.setCurrentLineItemValue('item', 'quantity',
+                    pickupJobCount);
+                recInvoice.commitLineItem('item');
+                invoiceId = nlapiSubmitRecord(recInvoice);
+
+                // rasTeir1Count = 0;
+                // rasTeir2Count = 0;
+                // rasTeir3Count = 0;
 
                 var params = {
                     custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
@@ -394,6 +446,7 @@ function main() {
 
 
         old_customer_id = cust_prod_customer;
+        old_zee_id = cust_prod_zee;
         old_product_order_id = product_order_id
         oldSenderAddress = sender_address_1;
         count++;
@@ -423,11 +476,11 @@ function main() {
         });
         recInvoice.setFieldValue('customform', 116);
         recInvoice.setFieldValue('entity', old_customer_id);
-        // recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
-        //     435).getFieldValue('department'));
-        // recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
-        //     435)
-        //     .getFieldValue('location'));
+        recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+            old_zee_id).getFieldValue('department'));
+        recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+            old_zee_id)
+            .getFieldValue('location'));
         recInvoice.setFieldValue('trandate', tranDate);
         recInvoice.setFieldValue('custbody_inv_date_range_from',
             previousWeekStartDate);
