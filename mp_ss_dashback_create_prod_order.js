@@ -182,26 +182,26 @@ function main() {
                 nlapiSubmitRecord(productOrderRec);
 
                 //Create invoice for the number of pickup jobs for the week. 
-                recInvoice = nlapiCreateRecord('invoice', {
-                    recordmode: 'dynamic'
-                });
-                recInvoice.setFieldValue('customform', 116);
-                recInvoice.setFieldValue('entity', old_customer_id);
-                recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
-                    old_zee_id).getFieldValue('department'));
-                recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
-                    old_zee_id)
-                    .getFieldValue('location'));
-                recInvoice.setFieldValue('trandate', tranDate);
-                recInvoice.setFieldValue('custbody_inv_date_range_from',
-                    previousWeekStartDate);
-                recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
-                recInvoice.selectNewLineItem('item');
-                recInvoice.setCurrentLineItemValue('item', 'item', 10789);
-                recInvoice.setCurrentLineItemValue('item', 'quantity',
-                    pickupJobCount);
-                recInvoice.commitLineItem('item');
-                invoiceId = nlapiSubmitRecord(recInvoice);
+                // recInvoice = nlapiCreateRecord('invoice', {
+                //     recordmode: 'dynamic'
+                // });
+                // recInvoice.setFieldValue('customform', 116);
+                // recInvoice.setFieldValue('entity', old_customer_id);
+                // recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+                //     old_zee_id).getFieldValue('department'));
+                // recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+                //     old_zee_id)
+                //     .getFieldValue('location'));
+                // recInvoice.setFieldValue('trandate', tranDate);
+                // recInvoice.setFieldValue('custbody_inv_date_range_from',
+                //     previousWeekStartDate);
+                // recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
+                // recInvoice.selectNewLineItem('item');
+                // recInvoice.setCurrentLineItemValue('item', 'item', 10789);
+                // recInvoice.setCurrentLineItemValue('item', 'quantity',
+                //     pickupJobCount);
+                // recInvoice.commitLineItem('item');
+                // invoiceId = nlapiSubmitRecord(recInvoice);
 
                 // rasTeir1Count = 0;
                 // rasTeir2Count = 0;
@@ -386,62 +386,62 @@ function main() {
             /**
              * Reschedule script after updating product order with AP Line Item an the count of line items created is 150
              */
-            if (count > 450) {
-                nlapiLogExecution('DEBUG', 'Count', count);
+            // if (count > 450) {
+            //     nlapiLogExecution('DEBUG', 'Count', count);
 
-                var productOrderRec = nlapiLoadRecord(
-                    'customrecord_mp_ap_product_order', old_product_order_id);
-                if (manual_surcharge_to_be_applied == true) {
-                    productOrderRec.setFieldValue(
-                        'custrecord_manual_surcharge_applied', 1)
-                } else {
-                    productOrderRec.setFieldValue(
-                        'custrecord_manual_surcharge_applied', 2)
-                }
+            //     var productOrderRec = nlapiLoadRecord(
+            //         'customrecord_mp_ap_product_order', old_product_order_id);
+            //     if (manual_surcharge_to_be_applied == true) {
+            //         productOrderRec.setFieldValue(
+            //             'custrecord_manual_surcharge_applied', 1)
+            //     } else {
+            //         productOrderRec.setFieldValue(
+            //             'custrecord_manual_surcharge_applied', 2)
+            //     }
 
-                productOrderRec.setFieldValue('custrecord_ras_teir1_barcode_count', rasTeir1Count);
-                productOrderRec.setFieldValue('custrecord_ras_teir2_barcode_count', rasTeir2Count);
-                productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
-                // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
-                nlapiSubmitRecord(productOrderRec);
+            //     productOrderRec.setFieldValue('custrecord_ras_teir1_barcode_count', rasTeir1Count);
+            //     productOrderRec.setFieldValue('custrecord_ras_teir2_barcode_count', rasTeir2Count);
+            //     productOrderRec.setFieldValue('custrecord_ras_teir3_barcode_count', rasTeir3Count);
+            //     // productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
+            //     nlapiSubmitRecord(productOrderRec);
 
-                recInvoice = nlapiCreateRecord('invoice', {
-                    recordmode: 'dynamic'
-                });
-                recInvoice.setFieldValue('customform', 116);
-                recInvoice.setFieldValue('entity', old_customer_id);
-                recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
-                    old_zee_id).getFieldValue('department'));
-                recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
-                    old_zee_id)
-                    .getFieldValue('location'));
-                recInvoice.setFieldValue('trandate', tranDate);
-                recInvoice.setFieldValue('custbody_inv_date_range_from',
-                    previousWeekStartDate);
-                recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
-                recInvoice.selectNewLineItem('item');
-                recInvoice.setCurrentLineItemValue('item', 'item', 10789);
-                recInvoice.setCurrentLineItemValue('item', 'quantity',
-                    pickupJobCount);
-                recInvoice.commitLineItem('item');
-                invoiceId = nlapiSubmitRecord(recInvoice);
+            //     recInvoice = nlapiCreateRecord('invoice', {
+            //         recordmode: 'dynamic'
+            //     });
+            //     recInvoice.setFieldValue('customform', 116);
+            //     recInvoice.setFieldValue('entity', old_customer_id);
+            //     recInvoice.setFieldValue('department', nlapiLoadRecord('partner',
+            //         old_zee_id).getFieldValue('department'));
+            //     recInvoice.setFieldValue('location', nlapiLoadRecord('partner',
+            //         old_zee_id)
+            //         .getFieldValue('location'));
+            //     recInvoice.setFieldValue('trandate', tranDate);
+            //     recInvoice.setFieldValue('custbody_inv_date_range_from',
+            //         previousWeekStartDate);
+            //     recInvoice.setFieldValue('custbody_inv_date_range_to', tranDate);
+            //     recInvoice.selectNewLineItem('item');
+            //     recInvoice.setCurrentLineItemValue('item', 'item', 10789);
+            //     recInvoice.setCurrentLineItemValue('item', 'quantity',
+            //         pickupJobCount);
+            //     recInvoice.commitLineItem('item');
+            //     invoiceId = nlapiSubmitRecord(recInvoice);
 
-                // rasTeir1Count = 0;
-                // rasTeir2Count = 0;
-                // rasTeir3Count = 0;
+            //     // rasTeir1Count = 0;
+            //     // rasTeir2Count = 0;
+            //     // rasTeir3Count = 0;
 
-                var params = {
-                    custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
-                }
+            //     var params = {
+            //         custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
+            //     }
 
-                reschedule = rescheduleScript(prev_inv_deploy, adhoc_inv_deploy,
-                    params);
-                nlapiLogExecution('AUDIT', 'Reschedule Return', reschedule);
-                if (reschedule == false) {
+            //     reschedule = rescheduleScript(prev_inv_deploy, adhoc_inv_deploy,
+            //         params);
+            //     nlapiLogExecution('AUDIT', 'Reschedule Return', reschedule);
+            //     if (reschedule == false) {
 
-                    return false;
-                }
-            }
+            //         return false;
+            //     }
+            // }
         }
 
 
