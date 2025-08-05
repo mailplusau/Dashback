@@ -281,6 +281,24 @@ function main() {
 				} else {
 					pickupJobCount++;
 				}
+			} else if (oldSenderAddress == sender_address_1 && oldDateStockUsed != new_date) {
+				if (
+					(oldSenderAddress == "31 Wheat Road" ||
+						oldSenderAddress == "31 Wheat Rd") &&
+					oldSenderSuburb == "Sydney" &&
+					oldSenderPostcode == "2000"
+				) {
+					pickupJobAt25DollarCount++;
+				} else if (
+					(oldSenderAddress == "68 Market St" ||
+						oldSenderAddress == "68 Market Street") &&
+					oldSenderSuburb == "Sydney" &&
+					oldSenderPostcode == "2000"
+				) {
+					pickupJobAt20DollarCount++;
+				} else {
+					pickupJobCount++;
+				}
 			}
 
 			/**
@@ -355,11 +373,37 @@ function main() {
 		} else {
 			if (oldSenderAddress != sender_address_1) {
 				if (
-					oldSenderAddress == "31 Wheat Road" &&
+					(oldSenderAddress == "31 Wheat Road" ||
+						oldSenderAddress == "31 Wheat Rd") &&
 					oldSenderSuburb == "Sydney" &&
 					oldSenderPostcode == "2000"
 				) {
 					pickupJobAt25DollarCount++;
+				} else if (
+					(oldSenderAddress == "68 Market St" ||
+						oldSenderAddress == "68 Market Street") &&
+					oldSenderSuburb == "Sydney" &&
+					oldSenderPostcode == "2000"
+				) {
+					pickupJobAt20DollarCount++;
+				} else {
+					pickupJobCount++;
+				}
+			} else if (oldSenderAddress == sender_address_1 && oldDateStockUsed != new_date) {
+				if (
+					(oldSenderAddress == "31 Wheat Road" ||
+						oldSenderAddress == "31 Wheat Rd") &&
+					oldSenderSuburb == "Sydney" &&
+					oldSenderPostcode == "2000"
+				) {
+					pickupJobAt25DollarCount++;
+				} else if (
+					(oldSenderAddress == "68 Market St" ||
+						oldSenderAddress == "68 Market Street") &&
+					oldSenderSuburb == "Sydney" &&
+					oldSenderPostcode == "2000"
+				) {
+					pickupJobAt20DollarCount++;
 				} else {
 					pickupJobCount++;
 				}
