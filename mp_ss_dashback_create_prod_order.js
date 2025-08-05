@@ -1,7 +1,7 @@
 /*
  * Author:               Ankith Ravindran
  * Created on:           Wed Jun 21 2023
- * Modified on:          2023-06-22 08:03:11
+ * Modified on:          Tue, Aug 5, 2025 @ 9:38:09 AM
  * SuiteScript Version:
  * Description:          Daashback product order creation.Calculate the Dashback: Pickup Jobs quantity at the end of every week and create the invoice.
  *
@@ -54,6 +54,7 @@ function main() {
 	var pickupJobCount = 0;
 	var pickupJobAt25DollarCount = 0;
 	var pickupJobAt20DollarCount = 0;
+	var oldDateStockUsed = null;
 
 	var todayDate = null;
 	var tranDate = null;
@@ -216,7 +217,7 @@ function main() {
 					rasTeir3Count
 				);
 				// productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
-				nlapiSubmitRecord(productOrderRec);
+				// nlapiSubmitRecord(productOrderRec);
 
 				var params = {
 					custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
@@ -260,7 +261,7 @@ function main() {
 			);
 			product_order_rec.setFieldValue("custrecord_mp_ap_order_source", 6);
 
-			product_order_id = nlapiSubmitRecord(product_order_rec);
+			// product_order_id = nlapiSubmitRecord(product_order_rec);
 
 			if (oldSenderAddress != sender_address_1) {
 				if (
@@ -307,7 +308,6 @@ function main() {
 			if (inv_details.length > 33) {
 				inv_details = new_date + "-" + connote_number;
 			}
-			nlapiLogExecution("DEBUG", "Details", inv_details);
 			ap_stock_line_item.setFieldValue(
 				"custrecord_ap_line_item_inv_details",
 				inv_details
@@ -334,7 +334,7 @@ function main() {
 				);
 			}
 
-			nlapiSubmitRecord(ap_stock_line_item);
+			// nlapiSubmitRecord(ap_stock_line_item);
 
 			/**
 			 * Update Customer Product Stock record with the product order ID
@@ -351,7 +351,7 @@ function main() {
 				"custrecord_cust_prod_stock_status",
 				7
 			);
-			nlapiSubmitRecord(cust_prod_stock_record);
+			// nlapiSubmitRecord(cust_prod_stock_record);
 		} else {
 			if (oldSenderAddress != sender_address_1) {
 				if (
@@ -422,7 +422,7 @@ function main() {
 				);
 			}
 
-			nlapiSubmitRecord(ap_stock_line_item);
+			// nlapiSubmitRecord(ap_stock_line_item);
 
 			/**
 			 * Update the Customer Product Stock record with the Product Order ID
@@ -439,8 +439,10 @@ function main() {
 				"custrecord_cust_prod_stock_status",
 				7
 			);
-			nlapiSubmitRecord(cust_prod_stock_record);
+			// nlapiSubmitRecord(cust_prod_stock_record);
 		}
+
+
 
 		old_customer_id = cust_prod_customer;
 		old_zee_id = cust_prod_zee;
@@ -449,8 +451,10 @@ function main() {
 		oldSenderSuburb = sender_suburb;
 		oldSenderPostcode = sender_postcode;
 		oldSenderEmail = sender_email;
+		oldDateStockUsed = new_date;
 		count++;
-
+		nlapiLogExecution("DEBUG", "pickupJobCount", pickupJobCount);
+		nlapiLogExecution("DEBUG", "count", count);
 		return true;
 	});
 
@@ -478,7 +482,9 @@ function main() {
 			rasTeir3Count
 		);
 		// productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
-		nlapiSubmitRecord(productOrderRec);
+		// nlapiSubmitRecord(productOrderRec);
+
+		nlapiLogExecution("DEBUG", "Before creating Invoice > pickupJobCount", pickupJobCount);
 
 		recInvoice = nlapiCreateRecord("invoice", {
 			recordmode: "dynamic",
@@ -520,7 +526,7 @@ function main() {
 		}
 
 		recInvoice.commitLineItem("item");
-		invoiceId = nlapiSubmitRecord(recInvoice);
+		// invoiceId = nlapiSubmitRecord(recInvoice);
 	}
 }
 
