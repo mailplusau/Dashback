@@ -217,7 +217,7 @@ function main() {
 					rasTeir3Count
 				);
 				// productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
-				// nlapiSubmitRecord(productOrderRec);
+				nlapiSubmitRecord(productOrderRec);
 
 				var params = {
 					custscript_prev_deploy_create_prod_order: ctx.getDeploymentId(),
@@ -261,7 +261,7 @@ function main() {
 			);
 			product_order_rec.setFieldValue("custrecord_mp_ap_order_source", 6);
 
-			// product_order_id = nlapiSubmitRecord(product_order_rec);
+			product_order_id = nlapiSubmitRecord(product_order_rec);
 
 			if (oldSenderAddress != sender_address_1) {
 				if (
@@ -352,7 +352,7 @@ function main() {
 				);
 			}
 
-			// nlapiSubmitRecord(ap_stock_line_item);
+			nlapiSubmitRecord(ap_stock_line_item);
 
 			/**
 			 * Update Customer Product Stock record with the product order ID
@@ -369,7 +369,7 @@ function main() {
 				"custrecord_cust_prod_stock_status",
 				7
 			);
-			// nlapiSubmitRecord(cust_prod_stock_record);
+			nlapiSubmitRecord(cust_prod_stock_record);
 		} else {
 			if (oldSenderAddress != sender_address_1) {
 				if (
@@ -466,7 +466,7 @@ function main() {
 				);
 			}
 
-			// nlapiSubmitRecord(ap_stock_line_item);
+			nlapiSubmitRecord(ap_stock_line_item);
 
 			/**
 			 * Update the Customer Product Stock record with the Product Order ID
@@ -483,7 +483,7 @@ function main() {
 				"custrecord_cust_prod_stock_status",
 				7
 			);
-			// nlapiSubmitRecord(cust_prod_stock_record);
+			nlapiSubmitRecord(cust_prod_stock_record);
 		}
 
 
@@ -526,7 +526,7 @@ function main() {
 			rasTeir3Count
 		);
 		// productOrderRec.setFieldValue('custrecord_manual_barcode_count', manualBarcodesCount);
-		// nlapiSubmitRecord(productOrderRec);
+		nlapiSubmitRecord(productOrderRec);
 
 		nlapiLogExecution("DEBUG", "Before creating Invoice > pickupJobCount", pickupJobCount);
 
@@ -570,7 +570,7 @@ function main() {
 		}
 
 		recInvoice.commitLineItem("item");
-		// invoiceId = nlapiSubmitRecord(recInvoice);
+		invoiceId = nlapiSubmitRecord(recInvoice);
 	}
 }
 
